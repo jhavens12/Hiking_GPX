@@ -7,21 +7,6 @@ from pprint import pprint
 import itertools
 import numpy
 
-# 145: {'distance_from_previous': 12.519270330907082,
-#  'distance_from_start': 3620.672758173153,
-#distance_from_start_miles
-# distance_from_start_feet
-#  'elevation': 1237.523,
-#  'elevation_delta': 686.492,
-#  'elevation_delta_feet': 2250.66,
-#  'elevation_feet': 4058.4,
-#  'latitude': 44.31952499784529,
-#  'longitude': -72.88638004101813,
-#  'time': None,
-#  'time_delta': 0,
-#  'time_delta_seconds': 0}},
-#time_delta_minutes
-
 #graph_x = 'time_delta_minutes'
 graph_x = 'distance_from_start_miles'
 graph_y = 'elevation_delta_feet'
