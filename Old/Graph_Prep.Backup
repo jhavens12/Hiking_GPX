@@ -1,0 +1,75 @@
+import data_collect_prep as data_collect
+import glob
+import matplotlib.pyplot as plt
+import pylab
+import numpy as np
+from pprint import pprint
+import itertools
+
+#Graphs a dynamic number of GPX files (track_0_seg_0s)
+#Now graphs GPX files with multiple sections (Ascent and Decent)
+#Will print out when gpx file does not have elevation
+#graph_x and graph_y determine point datafields to be graphed
+
+# 'distance_from_previous': 2.7892068361288906,
+# 'distance_from_start': 3622.644251802095,
+# 'elevation': 394.0,
+# 'elevation_delta': -681.4000244140625,
+# 'latitude': 44.40251313149929,
+# 'longitude': -72.67535674385726}},
+
+graph_x = 'distance_from_start'
+graph_y = 'elevation_feet'
+
+file_list = glob.glob("/Users/Havens/Dropbox/PYTHON/Hiking_Full/GPX/*")
+
+master_dict = data_collect.run(file_list)
+
+#pprint(master_dict)
+
+graph_dictionary = {}
+graph_titles = {}
+for item,x in enumerate(master_dict):
+    x_list = []
+    y_list = []
+    count = item+1
+
+    if master_dict[x]['segments']['track_0_seg_0']['data_points'][1]['elevation'] != None:
+        for set,gpx_part in enumerate(master_dict[x]['segments']):
+            loop_count = set+1
+            run_through = str(count)+"."+str(loop_count)
+            run_through_list_x = []
+            run_through_list_y = []
+            graph_titles[run_through] = {}
+            graph_titles[run_through] = master_dict[x]['segments'][gpx_part]['name']
+            for y in master_dict[x]['segments'][gpx_part]['data_points']: #for each datapoint in first segment
+                    run_through_list_x.append(master_dict[x]['segments'][gpx_part]['data_points'][y][graph_x])
+                else:
+                    print (str(master_dict[x]['segments'][gpx_part]['data_points'][y][graph_x])+" X value, Does not exist")
+                    run_through_list_x.append(master_dict[x]['segments'][gpx_part]['data_points'][y][graph_x])
+                if master_dict[x]['segments'][gpx_part]['data_points'][y][graph_y]:
+                    run_through_list_y.append(master_dict[x]['segments'][gpx_part]['data_points'][y][graph_y])
+                else:
+                    print(str(master_dict[x]['segments'][gpx_part]['data_points'][y][graph_y])+" Y value, does not exist")
+                    run_through_list_y.append(master_dict[x]['segments'][gpx_part]['data_points'][y][graph_y])
+            graph_dictionary[run_through] = {}
+            graph_dictionary[run_through]['x']=run_through_list_x
+            graph_dictionary[run_through]['y']=run_through_list_y
+    else:
+        print(master_dict[x]['segments']['track_0_seg_0']['name'],"Does not contain elevation data")
+
+pprint (graph_dictionary)
+colors = itertools.cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w'])
+
+#plt.style.use('dark_background')
+plt.rcParams['lines.linewidth'] = 2
+for set,label in zip(graph_dictionary,graph_titles):
+    plt.plot(graph_dictionary[set]['x'],graph_dictionary[set]['y'],label=graph_titles[label],color=next(colors))
+    #plt.plot(graph_dictionary[set]['x'],graph_dictionary[set]['y'],label=graph_titles[label])
+
+plt.title(str(graph_x)+" vs "+str(graph_y))
+plt.xlabel(graph_x)
+plt.ylabel(graph_y)
+
+plt.legend()
+plt.show()
