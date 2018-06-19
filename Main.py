@@ -12,7 +12,7 @@ graph_x = 'distance_from_start_miles'
 graph_y = 'elevation_delta_feet'
 #graph_y = 'elevation_feet'
 
-file_list = glob.glob("/Users/Havens/Dropbox/PYTHON/Hiking_Full/GPX_Tracks/*")
+file_list = glob.glob("/Users/Havens/Dropbox/GPX/Graph/*")
 
 master_dict = data_collect.run(file_list)
 
